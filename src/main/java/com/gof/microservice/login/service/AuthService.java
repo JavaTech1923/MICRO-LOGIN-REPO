@@ -26,6 +26,7 @@ public class AuthService {
 	}
 	
 	public String generateToken(String userName) {
+		System.out.println("userName   :"+userName);
 		return jwtService.generateToken(userName);
 	}
 	

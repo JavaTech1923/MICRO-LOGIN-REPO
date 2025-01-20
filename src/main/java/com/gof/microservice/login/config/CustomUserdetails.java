@@ -4,12 +4,23 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import com.gof.microservice.login.entity.UserCredential;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+
+@Component
+@NoArgsConstructor
 public class CustomUserdetails implements UserDetails{
 	
 	
+	
+
 	private String username;
 	
 	private String password;

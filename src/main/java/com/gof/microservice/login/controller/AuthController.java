@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gof.microservice.dto.AuthRequest;
+import com.gof.microservice.login.dto.AuthRequest;
 import com.gof.microservice.login.entity.UserCredential;
 import com.gof.microservice.login.service.AuthService;
 
@@ -34,10 +34,13 @@ public class AuthController {
 	
 	@PostMapping("/token")
 	public String getToken(@RequestBody AuthRequest authRequest) {
-		Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword()));
+		System.out.println("authRequest.getUserName()   :"+authRequest.getName());
+		System.out.println("authRequest.getPassword()  :"+authRequest.getPassword());
+		Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getName(), authRequest.getPassword()));
 		if(authenticate.isAuthenticated()) {
-
-			return authService.generateToken(authRequest.getUserName());
+			System.out.println("authRequest.getUserName()   :"+authRequest.getName());
+			System.out.println("authRequest.getPassword()  :"+authRequest.getPassword());
+			return authService.generateToken(authRequest.getName());
 		}else {
 			throw new RuntimeException("Invalid Access");
 		}
@@ -46,6 +49,7 @@ public class AuthController {
 	
 	@GetMapping("/validate")
 	public String validateToken(@RequestParam("token") String token) {
+		System.out.println("token   :"+token);
 		authService.validateToken(token);
 		
 		return "validated token";

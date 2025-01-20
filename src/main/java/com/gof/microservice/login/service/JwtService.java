@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtService {
 
-  private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+	private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
 //  public String extractUsername(String token) {
 //    return extractClaim(token, Claims::getSubject);
@@ -26,33 +26,29 @@ public class JwtService {
 //    return claimsResolver.apply(claims);
 //  }
 
-  public String generateToken(String  userName) {
-	  Map<String, Object> claims= new HashMap<>();
-    return generateToken(claims, userName);
-  }
+	public String generateToken(String userName) {
+		Map<String, Object> claims = new HashMap<>();
+		System.out.println("userName inside Jwt Service :"+userName);
+		return generateToken(claims, userName);
+	}
 
-  public String generateToken(
-      Map<String, Object> extraClaims,
-      String userName
-  ) {
-    return Jwts
-        .builder()
-        .setClaims(extraClaims)
-        .setSubject(userName)
-        .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-        .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-        .compact();
-  }
+	public String generateToken(Map<String, Object> extraClaims, String userName) {
+		try {
+		return Jwts.builder().setClaims(extraClaims).setSubject(userName)
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+				.signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
+		}catch(Exception ex ) {
+			ex.printStackTrace();
+			return "exception in generate token";
+		}
+	}
 
-  public void validateToken(final String token) {
-	 Jws <Claims> claimsJws = Jwts
-      .parserBuilder()
-      .setSigningKey(getSignInKey())
-      .build()
-      .parseClaimsJws(token);
-      
-  }
+	public void validateToken(final String token) {
+		System.out.println("token   ------>"+token);
+		Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token);
+
+	}
 
 //  private boolean isTokenExpired(String token) {
 //    return extractExpiration(token).before(new Date());
@@ -71,8 +67,8 @@ public class JwtService {
 //        .getBody();
 //  }
 
-  private Key getSignInKey() {
-    byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-    return Keys.hmacShaKeyFor(keyBytes);
-  }
+	private Key getSignInKey() {
+		byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+		return Keys.hmacShaKeyFor(keyBytes);
+	}
 }
